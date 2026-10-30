@@ -1,0 +1,1680 @@
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>LingoPlay — Тоглоод хэл суръя</title>
+<style>
+:root{
+  font-family:Arial,sans-serif;
+  background:#f4f7f2;
+  color:#213c2f;
+}
+*{box-sizing:border-box}
+body{margin:0}
+button,input,select{font:inherit}
+button{cursor:pointer;border:0}
+button:disabled{opacity:.55;cursor:default}
+header{ 
+  background:#fff;
+  padding:18px 5%;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  border-bottom:1px solid #dce8dc;
+}
+.brand{
+  font-weight:900;
+  color:#246248;
+  font-size:25px;
+}
+select,input{
+  padding:12px;
+  border-radius:12px;
+  border:1px solid #d6e3d6;
+  background:white;
+  max-width:100%;
+}
+nav{
+  background:white;
+  padding:12px 5%;
+  display:flex;
+  gap:7px;
+  flex-wrap:wrap;
+}
+nav button{
+  padding:11px 14px;
+  border-radius:11px;
+  background:#edf3ed;
+  color:#436c52;
+}
+nav .active{background:#246248;color:white}
+main{
+  max-width:1050px;
+  margin:auto;
+  padding:22px 16px 70px;
+}
+h1,h2,h3,p{margin:0 0 12px}
+h1{font-size:30px}
+p{line-height:1.6}
+.hero{
+  background:#e2efdd;
+  padding:30px;
+  border-radius:22px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:15px;
+}
+.hero h1{font-size:38px}
+.frog{font-size:78px}
+.muted{color:#6f8a75;font-size:13px}
+.grid{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:13px;
+  margin:17px 0;
+}
+.card{
+  background:white;
+  border:1px solid #e0e8dd;
+  border-radius:17px;
+  padding:18px;
+  text-align:left;
+  min-width:0;
+}
+.card strong{font-size:24px;display:block}
+.card h3{font-size:17px}
+.card p{font-size:14px;color:#69806d}
+.primary,.secondary{
+  padding:12px 17px;
+  border-radius:11px;
+  margin:6px 5px 6px 0;
+}
+.primary{background:#246248;color:white}
+.secondary{background:#e8f1e5;color:#246248}
+.lesson{min-height:142px}
+.lesson.current{outline:2px solid #74a975}
+.lesson.locked{opacity:.55}
+.lesson small{
+  display:block;
+  margin-bottom:10px;
+  color:#75987d;
+}
+.section{margin-top:26px}
+.stat strong{font-size:28px}
+.words{
+  grid-template-columns:repeat(2,minmax(0,1fr));
+}
+.word{
+  position:relative;
+  padding-right:52px;
+}
+.word strong{overflow-wrap:anywhere}
+.word button{
+  position:absolute;
+  top:14px;
+  right:12px;
+  background:#eff5ed;
+  border-radius:10px;
+  padding:9px;
+}
+.progress{
+  background:#e2eae0;
+  border-radius:50px;
+  height:10px;
+  overflow:hidden;
+}
+.progress div{
+  height:100%;
+  background:#7cac79;
+}
+.quiz{max-width:690px;margin:auto}
+.question{
+  font-size:37px;
+  text-align:center;
+  margin:22px 0;
+  overflow-wrap:anywhere;
+}
+.options{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:10px;
+  margin-top:20px;
+}
+.option,.pair,.token{
+  background:white;
+  border:2px solid #dae6d8;
+  padding:14px;
+  border-radius:12px;
+  min-height:55px;
+}
+.option.good,.pair.done{
+  background:#dff1d8;
+  border-color:#78ab78;
+}
+.option.bad{
+  background:#fae3de;
+  border-color:#d49c93;
+}
+.feedback{
+  padding:16px;
+  border-radius:14px;
+  background:#e9f3e4;
+  margin-top:16px;
+}
+.feedback.wrong{background:#f9eae5}
+.match{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+}
+.match>div{display:grid;gap:9px}
+.pair.selected{
+  border-color:#8773ca;
+  background:#f0edfa;
+}
+.pair.done{opacity:.55}
+.tokens{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+  gap:8px;
+  margin:14px 0;
+}
+.answer-area{
+  min-height:75px;
+  border:2px dashed #a7c6a2;
+  border-radius:13px;
+  padding:12px;
+}
+.filters{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  margin:15px 0;
+}
+.filters input{flex:2;min-width:180px}
+.filters select{flex:1}
+.badge{
+  display:inline-block;
+  background:#eaf2e2;
+  padding:7px 11px;
+  border-radius:20px;
+  color:#47734d;
+  font-size:12px;
+}
+.result{text-align:center}
+.result .card{text-align:center}
+.timer{
+  padding:10px;
+  background:#fff1db;
+  border-radius:12px;
+}
+@media(max-width:680px){
+  .grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .hero h1{font-size:28px}
+  .frog{font-size:52px}
+  .card{padding:14px}
+  .question{font-size:30px}
+  nav button{padding:9px}
+  header{padding:14px}
+  nav{padding:12px}
+}
+@media(max-width:390px){
+  .words{grid-template-columns:1fr}
+  .hero{padding:18px}
+  .hero h1{font-size:24px}
+  .frog{font-size:45px}
+}
+
+/* LingoPlay colorful refresh: warm, playful, responsive and readable. */
+:root {
+  color-scheme: light;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: #f4f8f3;
+  color: #18382d;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  --ink: #18382d;
+  --green: #1f7655;
+  --green-deep: #15523d;
+  --mint: #dbf2e5;
+  --lime: #c8ee82;
+  --orange: #ffbd59;
+  --pink: #ffdfd7;
+  --line: #dfebe2;
+  --shadow: 0 14px 40px rgba(31, 75, 54, .09);
+}
+html { scroll-behavior: smooth; }
+body {
+  min-height: 100vh;
+  background:
+    radial-gradient(ellipse at 8% 12%, rgba(207, 239, 215, .6), transparent 32rem),
+    radial-gradient(ellipse at 94% 38%, rgba(255, 235, 198, .44), transparent 30rem),
+    #f5f8f4;
+  color: var(--ink);
+}
+button, input, select { font: inherit; }
+button { -webkit-tap-highlight-color: transparent; }
+button:focus-visible, input:focus-visible, select:focus-visible {
+  outline: 3px solid rgba(67, 159, 116, .42);
+  outline-offset: 3px;
+}
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+}
+header {
+  position: sticky; top: 0; z-index: 30;
+  padding: 12px clamp(16px, 5vw, 72px);
+  min-height: 76px;
+  background: rgba(255,255,255,.88);
+  border-bottom: 1px solid rgba(216,232,220,.9);
+  box-shadow: 0 5px 22px rgba(27, 65, 46, .045);
+  backdrop-filter: blur(16px);
+}
+.brand-wrap { display: flex; align-items: center; gap: 11px; min-width: max-content; }
+.brand-mark {
+  display: grid; place-items: center; width: 46px; height: 46px; border-radius: 16px;
+  background: linear-gradient(145deg, #e1f6e6, #bbebce); font-size: 25px;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.9);
+}
+.brand { color: var(--green-deep); font-size: 21px; line-height: 1.05; letter-spacing: -.7px; font-weight: 900; }
+.brand-sub { margin-top: 4px; color: #779083; font-size: 11px; font-weight: 650; letter-spacing: .02em; }
+.header-tools { display: flex; align-items: center; justify-content: flex-end; gap: 10px; min-width: 0; }
+header select, select, input {
+  border: 1px solid #dbe8de; border-radius: 14px; background: #fff; color: var(--ink);
+  box-shadow: 0 3px 10px rgba(26,67,47,.04);
+}
+header select { padding: 10px 13px; font-weight: 700; }
+nav {
+  display: flex; justify-content: center; gap: 9px; flex-wrap: wrap;
+  padding: 12px 16px; background: rgba(255,255,255,.55);
+  border-bottom: 1px solid rgba(224,235,225,.75);
+}
+nav button {
+  padding: 10px 15px; border: 1px solid transparent; border-radius: 999px;
+  background: transparent; color: #648071; font-size: 14px; font-weight: 750;
+  transition: color .18s ease, background .18s ease, transform .18s ease, box-shadow .18s ease;
+}
+nav button:hover { background: #eaf5ed; color: var(--green-deep); transform: translateY(-1px); }
+nav .active { background: var(--green-deep); color: #fff; box-shadow: 0 7px 16px rgba(21,82,61,.2); }
+nav .active:hover { background: #1e684b; color: #fff; }
+main { max-width: 1120px; margin: 0 auto; padding: 28px 18px 76px; }
+h1, h2, h3, p { margin-top: 0; }
+h1 { color: var(--ink); font-size: clamp(27px, 4vw, 38px); letter-spacing: -.04em; line-height: 1.15; }
+h2 { color: var(--ink); letter-spacing: -.025em; }
+h3 { color: #244b39; }
+p { color: #61786b; line-height: 1.65; }
+.section { margin-top: 34px; }
+.hero {
+  position: relative; isolation: isolate; overflow: hidden;
+  min-height: 250px; padding: clamp(26px, 5vw, 48px);
+  border: 1px solid rgba(255,255,255,.55); border-radius: 30px;
+  background: linear-gradient(122deg, #15523d 0%, #237b57 58%, #52a877 100%);
+  color: #fff; box-shadow: 0 20px 45px rgba(30,100,67,.2);
+}
+.hero::before, .hero::after { content: ""; position: absolute; z-index: -1; border-radius: 50%; pointer-events: none; }
+.hero::before { width: 310px; height: 310px; right: 10%; top: -205px; border: 1px solid rgba(255,255,255,.17); box-shadow: 0 0 0 28px rgba(255,255,255,.035), 0 0 0 58px rgba(255,255,255,.025); }
+.hero::after { width: 190px; height: 190px; right: 26%; bottom: -145px; background: rgba(195,239,153,.13); }
+.hero > div { position: relative; z-index: 1; max-width: 690px; }
+.hero h1 { max-width: 650px; color: white; font-size: clamp(32px, 5vw, 48px); margin: 14px 0 10px; }
+.hero p { max-width: 490px; color: rgba(255,255,255,.82); font-size: 16px; margin-bottom: 20px; }
+.hero .badge { color: #e7ffd9; background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.18); }
+.hero .primary { background: var(--lime); color: #214a32; box-shadow: 0 8px 18px rgba(9,45,30,.16); }
+.hero .primary:hover { background: #d7f8a0; }
+.frog {
+  position: relative; z-index: 1; display: grid; place-items: center;
+  width: clamp(96px, 15vw, 148px); height: clamp(96px, 15vw, 148px); flex: 0 0 auto;
+  border: 1px solid rgba(255,255,255,.22); border-radius: 42px;
+  background: linear-gradient(145deg, rgba(255,255,255,.18), rgba(255,255,255,.07));
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.25), 0 15px 30px rgba(12,57,36,.14);
+  font-size: clamp(55px, 8vw, 82px); transform: rotate(4deg);
+}
+.grid { gap: 15px; margin: 18px 0 22px; }
+.card {
+  border: 1px solid rgba(219,232,221,.95); border-radius: 21px; padding: 20px;
+  background: rgba(255,255,255,.94); box-shadow: 0 8px 25px rgba(34,75,53,.055);
+  transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+}
+button.card:hover { transform: translateY(-3px); border-color: #acd8b8; box-shadow: var(--shadow); }
+.stat { position: relative; overflow: hidden; }
+.stat::after { content: ""; position: absolute; width: 62px; height: 62px; right: -20px; bottom: -24px; border-radius: 50%; background: #edf8ec; }
+.stat strong { position: relative; z-index: 1; color: var(--green-deep); font-size: 30px; letter-spacing: -.04em; }
+.stat p { position: relative; z-index: 1; margin-bottom: 0; font-size: 13px; font-weight: 650; }
+.primary, .secondary {
+  display: inline-flex; justify-content: center; align-items: center; gap: 7px;
+  padding: 12px 18px; border: 0; border-radius: 13px; font-weight: 800;
+  transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
+}
+.primary { background: var(--green); color: #fff; box-shadow: 0 6px 15px rgba(31,118,85,.16); }
+.primary:hover { background: var(--green-deep); transform: translateY(-1px); box-shadow: 0 9px 19px rgba(31,118,85,.22); }
+.secondary { background: #eaf5ec; color: var(--green-deep); }
+.secondary:hover { background: #dcefe1; transform: translateY(-1px); }
+.lesson { min-height: 156px; border: 1px solid #e2ece2; color: inherit; }
+.lesson.current { outline: 0; border-color: #8dc79f; background: linear-gradient(150deg,#fff,#f3fbf3); box-shadow: inset 0 0 0 1px #bfe2c7, 0 8px 24px rgba(40,105,65,.08); }
+.lesson.locked { opacity: .62; filter: saturate(.72); }
+.lesson small { color: #789482; font-weight: 750; letter-spacing: .025em; }
+.lesson h3 { margin-bottom: 7px; }
+.lesson p { margin-bottom: 9px; }
+.words { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.word { border-radius: 17px; }
+.word strong { color: #194a37; font-size: 20px; }
+.word p { margin: 5px 0 0; }
+.word button { display: grid; place-items: center; width: 39px; height: 39px; top: 13px; right: 13px; border: 1px solid #e3eee5; background: #f0f8f1; transition: transform .18s ease, background .18s ease; }
+.word button:hover { background: #e0f2e4; transform: scale(1.06); }
+.progress { height: 11px; background: #edf3ec; }
+.progress div { border-radius: inherit; background: linear-gradient(90deg, #68bd82, #b7d96b); transition: width .35s ease; }
+.quiz { max-width: 740px; }
+.question { margin: 24px 0; color: var(--green-deep); font-size: clamp(30px, 5vw, 42px); }
+.options { gap: 12px; }
+.option, .pair, .token { border: 1px solid #dfeae1; border-radius: 15px; background: #fff; color: #294b3a; font-weight: 700; transition: transform .17s ease, border-color .17s ease, background .17s ease; }
+.option:hover, .pair:hover, .token:hover { border-color: #9dcdaa; transform: translateY(-1px); }
+.option.good, .pair.done { border-color: #82c58f; background: #eaf8e8; color: #246b42; }
+.option.bad { border-color: #e2a69a; background: #fff0eb; color: #945042; }
+.feedback { border: 1px solid #d5e9d7; border-radius: 17px; background: #eff9ed; color: #234c34; }
+.feedback.wrong { border-color: #f0d1c9; background: #fff2ed; }
+.pair.selected { border-color: #8a76d1; background: #f2efff; }
+.badge { border: 1px solid #deeddc; background: #edf7e8; color: #427050; font-weight: 800; }
+.timer { display: inline-flex; border: 1px solid #f2dfb9; background: #fff6e6; color: #865817; font-weight: 850; }
+.result .card { text-align: center; }
+.filters input, .filters select { padding: 13px 15px; }
+input:focus, select:focus { border-color: #8bc39a; box-shadow: 0 0 0 4px rgba(98,171,116,.12); outline: none; }
+.google-slot { min-width: 210px; min-height: 40px; display: flex; justify-content: flex-end; align-items: center; }
+.google-fallback {
+  min-height: 40px; padding: 8px 13px; border: 1px solid #d9e4dc; border-radius: 12px;
+  background: #fff; color: #345242; font-size: 13px; font-weight: 750;
+  box-shadow: 0 3px 10px rgba(26,67,47,.04);
+}
+.google-fallback:hover { background: #f7faf7; border-color: #b9d5c0; }
+.auth-note { max-width: 205px; margin: 4px 0 0; color: #899b8e; font-size: 10px; line-height: 1.35; text-align: right; }
+.toast {
+  position: fixed; z-index: 100; left: 50%; bottom: 22px; max-width: min(540px, calc(100vw - 32px));
+  padding: 13px 17px; border: 1px solid rgba(255,255,255,.18); border-radius: 14px;
+  background: #183c2e; color: #fff; box-shadow: 0 12px 32px rgba(13,47,31,.23);
+  font-size: 14px; line-height: 1.5; transform: translate(-50%, 18px); opacity: 0;
+  pointer-events: none; transition: opacity .22s ease, transform .22s ease;
+}
+.toast.show { opacity: 1; transform: translate(-50%, 0); }
+@media (max-width: 720px) {
+  header { align-items: flex-start; gap: 12px; padding: 11px 14px; }
+  .header-tools { flex-wrap: wrap; gap: 7px; }
+  .google-slot { min-width: 0; }
+  .brand-sub { display: none; }
+  nav { justify-content: flex-start; padding: 10px 12px; gap: 5px; }
+  nav button { padding: 9px 12px; font-size: 13px; }
+  main { padding: 21px 14px 60px; }
+  .hero { min-height: 220px; border-radius: 23px; }
+  .hero .frog { margin-left: auto; }
+  .grid { gap: 11px; }
+  .card { padding: 16px; border-radius: 18px; }
+  .lesson { min-height: 145px; }
+}
+@media (max-width: 520px) {
+  header { position: relative; align-items: center; flex-wrap: wrap; }
+  .brand-mark { width: 40px; height: 40px; border-radius: 14px; font-size: 22px; }
+  .brand { font-size: 19px; }
+  .header-tools { width: 100%; justify-content: space-between; }
+  .google-slot { min-height: 38px; }
+  nav { overflow-x: auto; flex-wrap: nowrap; }
+  nav button { flex: 0 0 auto; }
+  .hero { align-items: flex-start; gap: 8px; padding: 23px 19px; }
+  .hero h1 { max-width: 290px; font-size: 30px; }
+  .hero p { max-width: 260px; font-size: 14px; }
+  .frog { width: 66px; height: 66px; margin-top: 12px; border-radius: 22px; font-size: 39px; }
+  .grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
+  .words { grid-template-columns: 1fr; }
+  .options { grid-template-columns: 1fr; }
+  .question { font-size: 29px; }
+  .auth-note { text-align: left; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; }
+}
+
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand-wrap">
+    <span class="brand-mark" aria-hidden="true">🌱</span>
+    <div>
+      <div class="brand">LingoPlay</div>
+      <div class="brand-sub">Хэл сурах жижиг аялал</div>
+    </div>
+  </div>
+  <div class="header-tools">
+    <label class="sr-only" for="language">Сурах хэл сонгох</label>
+    <select id="language" onchange="changeLanguage(this.value)">
+      <option value="en">🇬🇧 Англи</option>
+      <option value="ko">🇰🇷 Солонгос</option>
+    </select>
+    <div id="googleButton" class="google-slot" aria-live="polite"></div>
+  </div>
+</header>
+
+<nav id="nav">
+  <button onclick="go('home')">🏠 Нүүр</button>
+  <button onclick="go('lessons')">📚 Level</button>
+  <button onclick="go('games')">🎮 Тоглоом</button>
+  <button onclick="go('words')">🔎 Үгийн сан</button>
+  <button onclick="go('progress')">⭐ Ахиц</button>
+</nav>
+
+<main id="screen"></main>
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+<script>
+
+const NAMES = [
+"Анхны мэндчилгээ",
+"Миний эргэн тойронд",
+"Гэр бүл, найзууд",
+"Амттай ертөнц",
+"Би юу хийдэг вэ?",
+"Тооны жижиг аялал",
+"Өнгө ба дүрс",
+"Амьтдын ертөнц",
+"Цаг агаар ба улирал",
+"Цаг ба хуанли",
+"Хотын газрууд",
+"Тээвэр ба аялал",
+"Хувцас ба хэрэглэл",
+"Хүний бие",
+"Гэр дотор",
+"Спорт ба хобби",
+"Сэтгэл хөдлөл",
+"Сургуулийн хичээлүүд",
+"Технологийн ертөнц",
+"Ажил мэргэжил",
+"Үйл үгс — II",
+"Тэмдэг нэрс",
+"Дэлгүүр, худалдаа",
+"Байгаль ба дэлхий",
+"Өдөр тутмын яриа"
+];
+
+const IDS=[
+"hello","daily","people","food","actions",
+"numbers","colors","animals","weather","time",
+"places","transport","clothes","body","home",
+"hobbies","feelings","subjects","technology",
+"jobs","moreverbs","adjectives","shopping",
+"nature","phrases"
+];
+
+
+const VOCAB = {
+en: [
+"hello|Сайн уу;thank you|Баярлалаа;yes|Тийм;no|Үгүй;goodbye|Баяртай;name|Нэр;friend|Найз;please|Гуйя",
+"book|Ном;bag|Цүнх;school|Сургууль;house|Байшин;chair|Сандал;door|Хаалга;clock|Цаг;phone|Утас",
+"mother|Ээж;father|Аав;family|Гэр бүл;person|Хүн;child|Хүүхэд;teacher|Багш;student|Сурагч;sister|Эгч / охин дүү",
+"water|Ус;milk|Сүү;bread|Талх;rice|Будаа;apple|Алим;banana|Гадил;coffee|Кофе;food|Хоол хүнс",
+"go|Явах;come|Ирэх;eat|Идэх;drink|Уух;read|Унших;watch|Үзэх;study|Хичээл хийх;like|Дуртай байх",
+"one|Нэг;two|Хоёр;three|Гурав;four|Дөрөв;five|Тав;six|Зургаа;seven|Долоо;eight|Найм;nine|Ес;ten|Арав",
+"red|Улаан;blue|Цэнхэр;yellow|Шар;green|Ногоон;black|Хар;white|Цагаан;pink|Ягаан;purple|Нил ягаан;orange|Улбар шар;brown|Бор;gray|Саарал;color|Өнгө;circle|Тойрог;square|Дөрвөлжин;triangle|Гурвалжин",
+"cat|Муур;dog|Нохой;bird|Шувуу;fish|Загас;horse|Морь;cow|Үхэр;pig|Гахай;chicken|Тахиа;rabbit|Туулай;bear|Баавгай;tiger|Бар;lion|Арслан;elephant|Заан;monkey|Сармагчин;sheep|Хонь",
+"sun|Нар;rain|Бороо;snow|Цас;wind|Салхи;cloud|Үүл;sky|Тэнгэр;weather|Цаг агаар;hot|Халуун;cold|Хүйтэн;warm|Дулаан;cool|Сэрүүхэн;spring|Хавар;summer|Зун;autumn|Намар;winter|Өвөл",
+"today|Өнөөдөр;tomorrow|Маргааш;yesterday|Өчигдөр;now|Одоо;morning|Өглөө;noon|Үд дунд;afternoon|Үдээс хойш;evening|Орой;night|Шөнө;day|Өдөр;week|Долоо хоног;month|Сар;year|Жил;hour|Цаг (хугацаа);minute|Минут",
+"park|Цэцэрлэгт хүрээлэн;library|Номын сан;hospital|Эмнэлэг;bank|Банк;market|Зах;store|Дэлгүүр;restaurant|Хоолны газар;cafe|Кафе;post office|Шуудан;museum|Музей;cinema|Кино театр;station|Өртөө;airport|Онгоцны буудал;street|Гудамж;bridge|Гүүр",
+"bus|Автобус;subway|Метро;train|Галт тэрэг;taxi|Такси;car|Машин;bicycle|Унадаг дугуй;airplane|Нисэх онгоц;boat|Усан онгоц;ticket|Тасалбар;map|Газрын зураг;trip|Аялал;stop|Зогсоол;departure|Хөдлөх / явах;arrival|Ирэх / хүрэх;road|Зам",
+"shirt|Цамц;pants|Өмд;shoes|Гутал;hat|Малгай;coat|Пальто;jacket|Хүрэм;dress|Даашинз;skirt|Юбка;socks|Оймс;gloves|Бээлий;scarf|Ороолт;belt|Бүс;glasses|Нүдний шил;umbrella|Шүхэр;pocket|Халаас",
+"head|Толгой;hair|Үс;face|Нүүр;eye|Нүд;ear|Чих;nose|Хамар;mouth|Ам;hand|Гар (сарвуу);foot|Хөлийн тавхай;arm|Гар (мөрнөөс);leg|Хөл;heart|Зүрх;shoulder|Мөр;knee|Өвдөг;finger|Хуруу",
+"room|Өрөө;kitchen|Гал тогоо;bathroom|Ариун цэврийн өрөө;bedroom|Унтлагын өрөө;living room|Зочны өрөө;bed|Ор;table|Ширээ;window|Цонх;wall|Хана;floor|Шал;lamp|Чийдэн;refrigerator|Хөргөгч;television|Зурагт;mirror|Толь;key|Түлхүүр",
+"sport|Спорт;basketball|Сагсан бөмбөг;football|Хөлбөмбөг;swimming|Усанд сэлэх;running|Гүйх;cycling|Дугуй унах;music|Хөгжим;drawing|Зураг зурах;dancing|Бүжиглэх;singing|Дуулах;game|Тоглоом;reading|Ном унших;photography|Гэрэл зураг авах;exercise|Дасгал;hobby|Хобби",
+"happy|Аз жаргалтай;sad|Гунигтай;angry|Ууртай;nervous|Сандарсан;tired|Ядарсан;excited|Догдолсон;afraid|Айсан;surprised|Гайхсан;bored|Уйдсан;calm|Тайван;kind|Сайхан сэтгэлтэй;friendly|Нөхөрсөг;proud|Бахархсан;worried|Санаа зовсон;confident|Өөртөө итгэлтэй",
+"mathematics|Математик;science|Шинжлэх ухаан;history|Түүх;geography|Газарзүй;biology|Биологи;physics|Физик;chemistry|Хими;art|Дүрслэх урлаг;music class|Хөгжмийн хичээл;physical education|Биеийн тамир;English class|Англи хэлний хичээл;exam|Шалгалт;homework|Гэрийн даалгавар;notebook|Дэвтэр;question|Асуулт",
+"computer|Компьютер;keyboard|Гар (keyboard);mouse|Хулгана (компьютер);screen|Дэлгэц;charger|Цэнэглэгч;battery|Батерей;internet|Интернэт;website|Вэбсайт;app|Апп;file|Файл;picture|Зураг;video|Видео;message|Мессеж;password|Нууц үг;camera|Камер",
+"doctor|Эмч;nurse|Сувилагч;engineer|Инженер;programmer|Программист;driver|Жолооч;chef|Тогооч;firefighter|Гал сөнөөгч;police officer|Цагдаа;artist|Зураач;musician|Хөгжимчин;actor|Жүжигчин;farmer|Тариачин;shopkeeper|Дэлгүүрийн эзэн;pilot|Нисгэгч;scientist|Эрдэмтэн",
+"walk|Алхах;run|Гүйх;sleep|Унтах;wake up|Сэрэх;write|Бичих;listen|Сонсох;speak|Ярих;learn|Сурах;teach|Заах;open|Нээх;close|Хаах;buy|Худалдаж авах;sell|Худалдах;wait|Хүлээх;help|Туслах",
+"big|Том;small|Жижиг;long|Урт;short|Богино;new|Шинэ;old|Хуучин;fast|Хурдан;slow|Удаан;easy|Амархан;difficult|Хэцүү;beautiful|Үзэсгэлэнтэй;interesting|Сонирхолтой;important|Чухал;different|Өөр;same|Ижил",
+"money|Мөнгө;price|Үнэ;discount|Хямдрал;receipt|Баримт;cash|Бэлэн мөнгө;card|Карт;cheap|Хямд;expensive|Үнэтэй;size|Хэмжээ;color choice|Өнгөний сонголт;customer|Үйлчлүүлэгч;shopping|Дэлгүүр хэсэх;gift|Бэлэг;cashier|Кассчин;payment|Төлбөр",
+"mountain|Уул;river|Гол;lake|Нуур;sea|Тэнгис;forest|Ой;tree|Мод;flower|Цэцэг;grass|Өвс;stone|Чулуу;sand|Элс;island|Арал;desert|Цөл;moon|Сар (тэнгэр);star|Од;earth|Дэлхий",
+"good morning|Өглөөний мэнд;good night|Сайхан амраарай;see you later|Дараа уулзъя;excuse me|Уучлаарай (анхаарал татах);I am sorry|Уучлаарай (алдаа гаргасан);no problem|Зүгээр ээ;I do not know|Би мэдэхгүй;I understand|Би ойлголоо;one more time|Дахиад нэг удаа;slowly please|Аажуухан хэлээрэй;how much is it?|Энэ хэд вэ?;where is it?|Хаана байна вэ?;what is this?|Энэ юу вэ?;nice to meet you|Танилцахад таатай байна;take care|Сайн байгаарай"
+],
+
+ko: [
+"안녕하세요|Сайн байна уу;감사합니다|Баярлалаа;네|Тийм;아니요|Үгүй;안녕|Сайн уу;이름|Нэр;친구|Найз;또 만나요|Дахин уулзъя",
+"책|Ном;가방|Цүнх;학교|Сургууль;집|Гэр;의자|Сандал;문|Хаалга;시계|Цаг;전화|Утас",
+"엄마|Ээж;아빠|Аав;가족|Гэр бүл;사람|Хүн;아이|Хүүхэд;선생님|Багш;학생|Сурагч;동생|Дүү",
+"물|Ус;우유|Сүү;빵|Талх;밥|Будаа / хоол;사과|Алим;바나나|Гадил;커피|Кофе;음식|Хоол хүнс",
+"가요|Явдаг / явна;와요|Ирдэг / ирнэ;먹어요|Иддэг / иднэ;마셔요|Уудаг / ууна;읽어요|Уншдаг / уншина;봐요|Үздэг / үзнэ;공부해요|Хичээл хийдэг;좋아해요|Дуртай",
+"일|Нэг;이|Хоёр;삼|Гурав;사|Дөрөв;오|Тав;육|Зургаа;칠|Долоо;팔|Найм;구|Ес;십|Арав",
+"빨강|Улаан;파랑|Цэнхэр;노랑|Шар;초록|Ногоон;검정|Хар;하양|Цагаан;분홍|Ягаан;보라|Нил ягаан;주황|Улбар шар;갈색|Бор;회색|Саарал;색깔|Өнгө;원|Тойрог;사각형|Дөрвөлжин;삼각형|Гурвалжин",
+"고양이|Муур;개|Нохой;새|Шувуу;물고기|Загас;말|Морь;소|Үхэр;돼지|Гахай;닭|Тахиа;토끼|Туулай;곰|Баавгай;호랑이|Бар;사자|Арслан;코끼리|Заан;원숭이|Сармагчин;양|Хонь",
+"해|Нар;비|Бороо;눈|Цас;바람|Салхи;구름|Үүл;하늘|Тэнгэр;날씨|Цаг агаар;덥다|Халуун;춥다|Хүйтэн;따뜻하다|Дулаан;시원하다|Сэрүүхэн;봄|Хавар;여름|Зун;가을|Намар;겨울|Өвөл",
+"오늘|Өнөөдөр;내일|Маргааш;어제|Өчигдөр;지금|Одоо;아침|Өглөө;정오|Үд дунд;오후|Үдээс хойш;저녁|Орой;밤|Шөнө;하루|Өдөр;주|Долоо хоног;달|Сар;년|Жил;시간|Цаг (хугацаа);분|Минут",
+"공원|Цэцэрлэгт хүрээлэн;도서관|Номын сан;병원|Эмнэлэг;은행|Банк;시장|Зах;가게|Дэлгүүр;식당|Хоолны газар;카페|Кафе;우체국|Шуудан;박물관|Музей;영화관|Кино театр;역|Өртөө;공항|Онгоцны буудал;거리|Гудамж;다리|Гүүр",
+"버스|Автобус;지하철|Метро;기차|Галт тэрэг;택시|Такси;자동차|Машин;자전거|Унадаг дугуй;비행기|Нисэх онгоц;배|Усан онгоц;표|Тасалбар;지도|Газрын зураг;여행|Аялал;정류장|Зогсоол;출발|Хөдлөх / явах;도착|Ирэх / хүрэх;도로|Зам",
+"셔츠|Цамц;바지|Өмд;신발|Гутал;모자|Малгай;코트|Пальто;재킷|Хүрэм;원피스|Даашинз;치마|Юбка;양말|Оймс;장갑|Бээлий;목도리|Ороолт;벨트|Бүс;안경|Нүдний шил;우산|Шүхэр;주머니|Халаас",
+"머리|Толгой;머리카락|Үс;얼굴|Нүүр;눈|Нүд;귀|Чих;코|Хамар;입|Ам;손|Гар (сарвуу);발|Хөлийн тавхай;팔|Гар (мөрнөөс);다리|Хөл;심장|Зүрх;어깨|Мөр;무릎|Өвдөг;손가락|Хуруу",
+"방|Өрөө;부엌|Гал тогоо;화장실|Ариун цэврийн өрөө;침실|Унтлагын өрөө;거실|Зочны өрөө;침대|Ор;탁자|Ширээ;창문|Цонх;벽|Хана;바닥|Шал;램프|Чийдэн;냉장고|Хөргөгч;텔레비전|Зурагт;거울|Толь;열쇠|Түлхүүр",
+"스포츠|Спорт;농구|Сагсан бөмбөг;축구|Хөлбөмбөг;수영|Усанд сэлэх;달리기|Гүйх;자전거 타기|Дугуй унах;음악|Хөгжим;그림 그리기|Зураг зурах;춤추기|Бүжиглэх;노래하기|Дуулах;게임|Тоглоом;독서|Ном унших;사진 촬영|Гэрэл зураг авах;운동|Дасгал;취미|Хобби",
+"행복하다|Аз жаргалтай;슬프다|Гунигтай;화가 나다|Ууртай;긴장하다|Сандарсан;피곤하다|Ядарсан;신나다|Догдолсон;무섭다|Айсан;놀라다|Гайхсан;지루하다|Уйдсан;차분하다|Тайван;친절하다|Сайхан сэтгэлтэй;다정하다|Нөхөрсөг;자랑스럽다|Бахархсан;걱정하다|Санаа зовсон;자신감 있다|Өөртөө итгэлтэй",
+"수학|Математик;과학|Шинжлэх ухаан;역사|Түүх;지리|Газарзүй;생물|Биологи;물리|Физик;화학|Хими;미술|Дүрслэх урлаг;음악 수업|Хөгжмийн хичээл;체육|Биеийн тамир;영어 수업|Англи хэлний хичээл;시험|Шалгалт;숙제|Гэрийн даалгавар;공책|Дэвтэр;질문|Асуулт",
+"컴퓨터|Компьютер;키보드|Гар (keyboard);마우스|Хулгана (компьютер);화면|Дэлгэц;충전기|Цэнэглэгч;배터리|Батерей;인터넷|Интернэт;웹사이트|Вэбсайт;앱|Апп;파일|Файл;사진|Зураг;동영상|Видео;메시지|Мессеж;비밀번호|Нууц үг;카메라|Камер",
+"의사|Эмч;간호사|Сувилагч;엔지니어|Инженер;프로그래머|Программист;운전기사|Жолооч;요리사|Тогооч;소방관|Гал сөнөөгч;경찰관|Цагдаа;화가|Зураач;음악가|Хөгжимчин;배우|Жүжигчин;농부|Тариачин;가게 주인|Дэлгүүрийн эзэн;조종사|Нисгэгч;과학자|Эрдэмтэн",
+"걷다|Алхах;달리다|Гүйх;자다|Унтах;일어나다|Сэрэх;쓰다|Бичих;듣다|Сонсох;말하다|Ярих;배우다|Сурах;가르치다|Заах;열다|Нээх;닫다|Хаах;사다|Худалдаж авах;팔다|Худалдах;기다리다|Хүлээх;돕다|Туслах",
+"크다|Том;작다|Жижиг;길다|Урт;짧다|Богино;새롭다|Шинэ;오래되다|Хуучин;빠르다|Хурдан;느리다|Удаан;쉽다|Амархан;어렵다|Хэцүү;아름답다|Үзэсгэлэнтэй;재미있다|Сонирхолтой;중요하다|Чухал;다르다|Өөр;같다|Ижил",
+"돈|Мөнгө;가격|Үнэ;할인|Хямдрал;영수증|Баримт;현금|Бэлэн мөнгө;카드|Карт;싸다|Хямд;비싸다|Үнэтэй;사이즈|Хэмжээ;색상|Өнгөний сонголт;손님|Үйлчлүүлэгч;쇼핑|Дэлгүүр хэсэх;선물|Бэлэг;계산원|Кассчин;결제|Төлбөр",
+"산|Уул;강|Гол;호수|Нуур;바다|Тэнгис;숲|Ой;나무|Мод;꽃|Цэцэг;풀|Өвс;돌|Чулуу;모래|Элс;섬|Арал;사막|Цөл;달|Сар (тэнгэр);별|Од;지구|Дэлхий",
+"좋은 아침이에요|Өглөөний мэнд;안녕히 주무세요|Сайхан амраарай;나중에 봐요|Дараа уулзъя;실례합니다|Уучлаарай (анхаарал татах);죄송합니다|Уучлаарай (алдаа гаргасан);괜찮아요|Зүгээр ээ;몰라요|Би мэдэхгүй;알겠어요|Би ойлголоо;한 번 더|Дахиад нэг удаа;천천히 해 주세요|Аажуухан хэлээрэй;얼마예요?|Энэ хэд вэ?;어디예요?|Хаана байна вэ?;이게 뭐예요?|Энэ юу вэ?;만나서 반갑습니다|Танилцахад таатай байна;잘 지내세요|Сайн байгаарай"
+]
+};
+
+const COURSES = Object.fromEntries(
+  ["en","ko"].map(lang=>[
+    lang,
+    VOCAB[lang].map((line,level)=>({
+      id:IDS[level],
+      title:NAMES[level],
+      level:level+1,
+      words:line.split(";").map((entry,i)=>{
+        const [word,mn]=entry.split("|");
+        return {
+          id:`${lang}-${IDS[level]}-${i}`,
+          word,
+          mn,
+          level
+        };
+      })
+    }))
+  ])
+);
+
+const SENTENCES={
+en:[
+["Би сурагч.",["I","am","a","student."]],
+["Энэ бол ном.",["This","is","a","book."]],
+["Би ус уудаг.",["I","drink","water."]],
+["Би алимд дуртай.",["I","like","apples."]],
+["Бид Англи хэл сурдаг.",["We","study","English."]],
+["Тэр эмэгтэй багш.",["She","is","a","teacher."]]
+],
+ko:[
+["Би сурагч.",["저는","학생이에요."]],
+["Энэ бол ном.",["이것은","책이에요."]],
+["Би ус уудаг.",["저는","물을","마셔요."]],
+["Би алим иддэг.",["저는","사과를","먹어요."]],
+["Би хичээл хийдэг.",["저는","공부해요."]],
+["Би найзтайгаа уулздаг.",["저는","친구를","만나요."]]
+]
+};
+
+const KEY="lingoplay.progress.v2";
+
+const empty=()=>({
+  lang:"en",
+  xp:0,
+  rounds:0,
+  correct:0,
+  learned:[],
+  completed:{en:[],ko:[]},
+  streak:0,
+  lastPlay:null
+});
+
+function load(){
+  let raw=null;
+  try{
+    raw=JSON.parse(
+      localStorage.getItem(KEY)||
+      localStorage.getItem("lingoplay.progress.v1")||
+      "null"
+    );
+  }catch{}
+
+  const s=empty();
+  if(!raw)return s;
+
+  s.lang=["en","ko"].includes(raw.lang)
+    ?raw.lang:"en";
+
+  for(const k of ["xp","rounds","correct","streak"]){
+    s[k]=Math.max(0,Number(raw[k])||0);
+  }
+
+  s.lastPlay=typeof raw.lastPlay==="string"
+    ?raw.lastPlay:null;
+
+  s.learned=Array.isArray(raw.learned)
+    ?raw.learned:[];
+
+  for(const lang of ["en","ko"]){
+    s.completed[lang]=(raw.completed?.[lang]||[])
+      .map(v=>typeof v==="number"?v:IDS.indexOf(v))
+      .filter(v=>
+        Number.isInteger(v)&&v>=0&&v<25
+      );
+  }
+  return s;
+}
+
+let state=load();
+let game=null;
+let clock=null;
+
+const screen=document.getElementById("screen");
+
+const esc=s=>String(s).replace(
+  /[&<>"']/g,
+  c=>({
+    "&":"&amp;",
+    "<":"&lt;",
+    ">":"&gt;",
+    '"':"&quot;",
+    "'":"&#39;"
+  }[c])
+);
+
+const shuffle=a=>[...a].sort(()=>Math.random()-.5);
+
+const words=()=>COURSES[state.lang]
+  .flatMap(l=>l.words);
+
+const done=i=>state.completed[state.lang].includes(i);
+
+const open=i=>i===0||done(i-1);
+
+const save=()=>{
+  try{
+    localStorage.setItem(KEY,JSON.stringify(state));
+  }catch{}
+};
+
+const label=()=>state.lang==="en"?"Англи":"Солонгос";
+
+const bar=(a,b)=>`
+<div class="progress">
+  <div style="width:${Math.min(100,100*a/b)}%"></div>
+</div>`;
+
+const stats=(n,t)=>`
+<div class="card stat">
+  <strong>${n}</strong>
+  <p>${t}</p>
+</div>`;
+
+function changeLanguage(lang){
+  if(!COURSES[lang])return;
+  state.lang=lang;
+  save();
+  
+// Google Identity Services scaffold.
+// Create a Web OAuth Client ID in Google Cloud and replace this placeholder.
+// The client ID is public, but a production login still needs a server to verify the ID token.
+const GOOGLE_CLIENT_ID = "YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com";
+let toastTimer = null;
+
+function showToast(message) {
+  const el = document.getElementById("toast");
+  if (!el) return;
+  el.textContent = message;
+  el.classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.classList.remove("show"), 4800);
+}
+
+function handleGoogleCredential(response) {
+  // Never persist the credential in localStorage or treat a client-only callback as verified.
+  if (!response || !response.credential) {
+    showToast("Google нэвтрэлтийн хариу ирсэнгүй. Дахин оролдоно уу.");
+    return;
+  }
+  showToast("Google-ээс хариу ирлээ. Жинхэнэ нэвтрэлт ба ахиц синк хийхийн тулд серверийн баталгаажуулалт холбоно уу.");
+}
+
+function mountGoogleButton() {
+  const host = document.getElementById("googleButton");
+  if (!host) return;
+  if (!GOOGLE_CLIENT_ID || GOOGLE_CLIENT_ID.startsWith("YOUR_")) {
+    host.innerHTML = `
+      <button type="button" class="google-fallback" onclick="googleSetupMessage()">
+        <span aria-hidden="true">G</span> Google-ээр нэвтрэх
+      </button>
+      <p class="auth-note">OAuth Client ID тохируулсны дараа идэвхжинэ</p>`;
+    return;
+  }
+
+  host.innerHTML = '<span class="muted" style="font-size:12px">Google товч ачаалж байна…</span>';
+  const script = document.createElement("script");
+  script.src = "https://accounts.google.com/gsi/client";
+  script.async = true;
+  script.onload = () => {
+    if (!window.google?.accounts?.id) {
+      host.textContent = "Google Sign-In ачаалсангүй";
+      return;
+    }
+    window.google.accounts.id.initialize({
+      client_id: GOOGLE_CLIENT_ID,
+      callback: handleGoogleCredential,
+      auto_select: false
+    });
+    host.innerHTML = "";
+    window.google.accounts.id.renderButton(host, {
+      type: "standard", theme: "outline", size: "large", shape: "pill",
+      text: "signin_with", width: 220, logo_alignment: "left"
+    });
+  };
+  script.onerror = () => {
+    host.textContent = "Google товч ачаалсангүй";
+  };
+  document.head.appendChild(script);
+}
+
+function googleSetupMessage() {
+  showToast("Код доторх YOUR_GOOGLE_CLIENT_ID-г өөрийн Web OAuth Client ID-гаар солино уу. Энэ статик файл дангаараа хэрэглэгчийг сервер дээр баталгаажуулахгүй.");
+}
+
+
+document.addEventListener("DOMContentLoaded", mountGoogleButton);
+
+go("home");
+}
+
+function go(page){
+  clearInterval(clock);
+  clock=null;
+  game=null;
+
+  document.getElementById("language").value=state.lang;
+
+  [...document.querySelectorAll("nav button")]
+    .forEach((b,i)=>{
+      b.classList.toggle(
+        "active",
+        ["home","lessons","games","words","progress"][i]===page
+      );
+    });
+
+  if(page==="home"){
+    const next=COURSES[state.lang].findIndex(
+      (l,i)=>!done(i)
+    );
+    const idx=next<0?24:next;
+
+    screen.innerHTML=`
+    <section class="hero">
+      <div>
+        <span class="badge">25 LEVEL · 335 ҮГ / ХЭЛ</span>
+        <h1>Тоглоод хэл суръя!</h1>
+        <p>${label()} хэлээ монгол тайлбартай сураарай.</p>
+        <button class="primary" onclick="openLesson(${idx})">
+          Level ${idx+1} эхлэх →
+        </button>
+      </div>
+      <span class="frog">🐸</span>
+    </section>
+
+    <div class="grid">
+      ${stats(state.xp,"Нийт XP")}
+      ${stats(
+        state.learned.filter(
+          x=>x.startsWith(state.lang+"-")
+        ).length,"Сурсан үг"
+      )}
+      ${stats(
+        state.completed[state.lang].length+"/25",
+        "Дуусгасан level"
+      )}
+    </div>
+
+    <h2 class="section">🎮 Тоглоомууд</h2>
+    ${gameCards()}
+
+    <h2 class="section">📚 Хичээлүүд</h2>
+    ${lessonCards()}`;
+  }
+
+  if(page==="lessons"){
+    screen.innerHTML=`
+      <h1>📚 ${label()} хэл — 25 Level</h1>
+      <p>Сорилын 70%-д зөв хариулбал
+      дараагийн level нээгдэнэ.</p>
+      ${lessonCards()}
+    `;
+  }
+
+  if(page==="games"){
+    screen.innerHTML=`
+      <h1>🎮 Тоглоом</h1>
+      <p>Зөв хариулт бүр +10 XP.
+      Амжилттай дуусгавал +20 XP.</p>
+      ${gameCards()}
+    `;
+  }
+
+  if(page==="words"){
+    screen.innerHTML=`
+      <h1>🔎 Үгийн сан</h1>
+      <p>Нийт 335 үг — хайж, сэдвээр шүүж болно.</p>
+
+      <div class="filters">
+        <input
+          id="search"
+          placeholder="Үг эсвэл Монгол утга хайх"
+          oninput="filterWords()"
+        >
+        <select id="topic" onchange="filterWords()">
+          <option value="all">Бүх сэдэв</option>
+          ${NAMES.map((n,i)=>`
+            <option value="${i}">
+              ${i+1}. ${esc(n)}
+            </option>
+          `).join("")}
+        </select>
+      </div>
+
+      <p id="wordCount"></p>
+      <div class="grid words" id="wordList"></div>
+    `;
+    filterWords();
+  }
+
+  if(page==="progress"){
+    showProgress();
+  }
+
+  window.scrollTo(0,0);
+}
+
+function lessonCards(){
+  return `
+  <div class="grid">
+    ${COURSES[state.lang].map((l,i)=>`
+      <button
+        class="card lesson ${open(i)?"current":"locked"}"
+        onclick="openLesson(${i})"
+      >
+        <small>
+          ${done(i)?"✅ Дууссан":
+            open(i)?"🌱 Нээлттэй":"🔒 Түгжээтэй"}
+          · LEVEL ${i+1}
+        </small>
+        <h3>${esc(l.title)}</h3>
+        <p>${l.words.length} шинэ үг</p>
+        <b>
+          ${done(i)?"Давтах":
+            open(i)?"Сурах →":"Өмнөхийг дуусга"}
+        </b>
+      </button>
+    `).join("")}
+  </div>`;
+}
+
+const MODES=[
+  ["quiz","🎯 Үгийн сорил","Зөв утгыг сонгох"],
+  ["match","🧩 Хос олох","Үг, утгыг хослуулах"],
+  ["sentence","🧱 Өгүүлбэр эвлүүлэх","Үгсийг зөв дараалах"],
+  ["sprint","⚡ Хурдны сорил","45 секундын сорил"]
+];
+
+function gameCards(){
+  return `
+  <div class="grid words">
+    ${MODES.map(m=>`
+      <button
+        class="card"
+        onclick="startGame('${m[0]}')"
+      >
+        <h3>${m[1]}</h3>
+        <p>${m[2]}</p>
+      </button>
+    `).join("")}
+  </div>`;
+}
+
+function wordCard(w){
+  return `
+  <div class="card word">
+    <strong>${esc(w.word)}</strong>
+    <p>${esc(w.mn)}</p>
+    ${state.learned.includes(w.id)
+      ?'<small>✅ Сурсан</small>':''}
+    <button onclick="speak('${w.id}')">
+      🔊
+    </button>
+  </div>`;
+}
+
+function openLesson(i){
+  if(!open(i)){
+    alert("Өмнөх level-ийг 70%-тай давж нээнэ.");
+    return;
+  }
+
+  const l=COURSES[state.lang][i];
+  if(!l)return;
+
+  screen.innerHTML=`
+    <button class="secondary" onclick="go('lessons')">
+      ← Буцах
+    </button>
+
+    <h1>Level ${i+1}: ${esc(l.title)}</h1>
+
+    <p>
+      ${l.words.length} шинэ үгийг уншиж,
+      сонсоод сорилоо өгөөрэй.
+    </p>
+
+    <div class="grid words">
+      ${l.words.map(wordCard).join("")}
+    </div>
+
+    <button
+      class="primary"
+      onclick="startGame('quiz',${i})"
+    >
+      🎯 Level ${i+1}-ийн сорил эхлэх →
+    </button>
+  `;
+
+  window.scrollTo(0,0);
+}
+
+function filterWords(){
+  const q=document.getElementById("search")
+    .value.trim().toLowerCase();
+
+  const t=document.getElementById("topic").value;
+
+  const list=words().filter(w=>
+    (t==="all"||w.level===Number(t))&&
+    (
+      w.word.toLowerCase().includes(q)||
+      w.mn.toLowerCase().includes(q)
+    )
+  );
+
+  document.getElementById("wordCount")
+    .textContent=`${list.length} үг`;
+
+  document.getElementById("wordList").innerHTML=
+    list.length
+      ?list.map(wordCard).join("")
+      :'<p>Үг олдсонгүй.</p>';
+}
+
+function speak(id){
+  const w=words().find(w=>w.id===id);
+  if(!w)return;
+
+  if(!("speechSynthesis" in window)){
+    alert("Энэ браузер дуудлага дэмжихгүй байна.");
+    return;
+  }
+
+  speechSynthesis.cancel();
+
+  const u=new SpeechSynthesisUtterance(w.word);
+  u.lang=state.lang==="en"?"en-US":"ko-KR";
+  u.rate=.85;
+
+  speechSynthesis.speak(u);
+}
+
+function availableWords(){
+  const last=COURSES[state.lang].findIndex(
+    (l,i)=>!done(i)
+  );
+
+  return COURSES[state.lang]
+    .slice(0,last===-1?25:last+1)
+    .flatMap(l=>l.words);
+}
+
+function makeQuestion(w,pool){
+  const others=[
+    ...new Set(
+      pool.filter(x=>x.mn!==w.mn).map(x=>x.mn)
+    )
+  ];
+
+  return {
+    word:w,
+    answer:w.mn,
+    options:shuffle([
+      w.mn,
+      ...shuffle(others).slice(0,3)
+    ])
+  };
+}
+
+function startGame(mode,level=null){
+  clearInterval(clock);
+  clock=null;
+
+  if(level!==null&&!open(level))return;
+
+  const pool=level===null
+    ?availableWords()
+    :COURSES[state.lang][level].words;
+
+  game={
+    mode,
+    level,
+    pool,
+    index:0,
+    correct:0,
+    attempts:0,
+    learned:[],
+    answered:false,
+    finished:false
+  };
+
+  if(mode==="quiz"||mode==="sprint"){
+    game.questions=shuffle(pool)
+      .slice(
+        0,
+        mode==="quiz"
+          ?(level===null?10:pool.length)
+          :pool.length
+      )
+      .map(w=>makeQuestion(w,pool));
+
+    if(mode==="sprint"){
+      game.end=Date.now()+45000;
+
+      clock=setInterval(()=>{
+        if(!game||game.finished)return;
+
+        const el=document.getElementById("seconds");
+
+        if(el){
+          el.textContent=Math.max(
+            0,
+            Math.ceil((game.end-Date.now())/1000)
+          )+" сек";
+        }
+
+        if(Date.now()>=game.end){
+          finishGame();
+        }
+      },200);
+    }
+  }
+  else if(mode==="match"){
+    game.pairs=shuffle([
+      ...new Map(
+        pool.map(w=>[w.mn,w])
+      ).values()
+    ]).slice(0,6);
+
+    game.right=shuffle(game.pairs);
+    game.matched=[];
+    game.left=null;
+    game.rightPick=null;
+  }
+  else if(mode==="sentence"){
+    game.questions=shuffle(
+      SENTENCES[state.lang]
+    ).slice(0,5);
+
+    prepareSentence();
+  }
+  else{
+    return;
+  }
+
+  renderGame();
+  window.scrollTo(0,0);
+}
+
+function prepareSentence(){
+  game.selected=[];
+
+  game.order=shuffle(
+    game.questions[game.index][1].map((_,i)=>i)
+  );
+}
+
+function gameTitle(){
+  const title=MODES.find(
+    m=>m[0]===game.mode
+  )?.[1]||"Тоглоом";
+
+  const total=game.mode==="match"
+    ?game.pairs.length
+    :game.questions.length;
+
+  const current=game.mode==="match"
+    ?game.matched.length
+    :game.index;
+
+  return `
+    <button class="secondary" onclick="go('games')">
+      ← Тоглоом
+    </button>
+
+    <h2>
+      ${title}
+      ${game.level!==null
+        ?` · Level ${game.level+1}`:""}
+    </h2>
+
+    ${game.mode==="sprint"
+      ?'<span class="timer" id="seconds">45 сек</span>'
+      :`
+        <p>${Math.min(current+1,total)} / ${total}</p>
+        ${bar(current,total)}
+      `}
+  `;
+}
+
+function renderGame(){
+  if(!game||game.finished)return;
+
+  if(game.mode==="match"){
+    return renderMatch();
+  }
+
+  if(game.mode==="sentence"){
+    return renderSentence();
+  }
+
+  const q=game.questions[game.index];
+  if(!q)return finishGame();
+
+  screen.innerHTML=`
+  <div class="quiz">
+    ${gameTitle()}
+
+    <div class="card">
+      <p class="muted" style="text-align:center">
+        Энэ үгийн Монгол утгыг сонго:
+      </p>
+
+      <h1 class="question">
+        ${esc(q.word.word)}
+      </h1>
+
+      <div class="options">
+        ${q.options.map((o,i)=>`
+          <button
+            class="option ${
+              game.answered&&o===q.answer
+                ?"good"
+                :game.answered&&o===game.choice
+                  ?"bad":""
+            }"
+            onclick="answer(${i})"
+            ${game.answered?"disabled":""}
+          >
+            ${esc(o)}
+          </button>
+        `).join("")}
+      </div>
+    </div>
+
+    ${game.answered?`
+      <div class="feedback ${
+        game.choice===q.answer?"":"wrong"
+      }">
+        <b>
+          ${game.choice===q.answer
+            ?"✅ Зөв хариуллаа!"
+            :"🌱 Зөв хариулт:"}
+        </b>
+
+        ${esc(q.answer)}
+
+        <div>
+          <button
+            class="primary"
+            onclick="nextQuestion()"
+          >
+            Үргэлжлүүлэх →
+          </button>
+        </div>
+      </div>
+    `:""}
+  </div>`;
+}
+
+// ХАРИУЛТ ШАЛГАХ
+function answer(i){
+  if(!game||game.answered||game.finished)return;
+
+  if(
+    game.mode==="sprint"&&
+    Date.now()>=game.end
+  ){
+    return finishGame();
+  }
+
+  const q=game.questions[game.index];
+
+  if(!q||q.options[i]===undefined)return;
+
+  game.choice=q.options[i];
+  game.answered=true;
+  game.attempts++;
+
+  if(game.choice===q.answer){
+    game.correct++;
+    game.learned.push(q.word.id);
+  }
+
+  renderGame();
+}
+
+function nextQuestion(){
+  if(!game||!game.answered||game.finished)return;
+
+  game.index++;
+  game.answered=false;
+  game.choice=null;
+
+  if(game.index>=game.questions.length){
+    if(game.mode==="sprint"){
+      game.questions=shuffle(game.pool)
+        .map(w=>makeQuestion(w,game.pool));
+      game.index=0;
+    }
+    else{
+      return finishGame();
+    }
+  }
+
+  if(game.mode==="sentence"){
+    prepareSentence();
+  }
+
+  renderGame();
+}
+
+function renderMatch(){
+  screen.innerHTML=`
+  <div class="quiz">
+    ${gameTitle()}
+
+    <p>
+      Зүүн талаас үг, баруун талаас утгыг нь сонго.
+    </p>
+
+    <div class="match">
+      <div>
+        ${game.pairs.map((w,i)=>`
+          <button
+            class="pair ${
+              game.matched.includes(w.id)
+                ?"done"
+                :game.left===i?"selected":""
+            }"
+            onclick="pickPair('left',${i})"
+            ${game.matched.includes(w.id)
+              ?"disabled":""}
+          >
+            ${esc(w.word)}
+          </button>
+        `).join("")}
+      </div>
+
+      <div>
+        ${game.right.map((w,i)=>`
+          <button
+            class="pair ${
+              game.matched.includes(w.id)
+                ?"done"
+                :game.rightPick===i?"selected":""
+            }"
+            onclick="pickPair('right',${i})"
+            ${game.matched.includes(w.id)
+              ?"disabled":""}
+          >
+            ${esc(w.mn)}
+          </button>
+        `).join("")}
+      </div>
+    </div>
+
+    ${game.matched.length===game.pairs.length
+      ?`
+        <button class="primary" onclick="finishGame()">
+          Үр дүнгээ харах →
+        </button>
+      `:""}
+  </div>`;
+}
+
+function pickPair(side,i){
+  if(!game||game.finished||game.mode!=="match")return;
+
+  const list=side==="left"
+    ?game.pairs
+    :game.right;
+
+  if(!list[i]||game.matched.includes(list[i].id)){
+    return;
+  }
+
+  if(side==="left"){
+    game.left=i;
+  }
+  else{
+    game.rightPick=i;
+  }
+
+  if(game.left!==null&&game.rightPick!==null){
+    const left=game.pairs[game.left];
+    const right=game.right[game.rightPick];
+
+    game.attempts++;
+
+    if(left.id===right.id){
+      game.correct++;
+      game.matched.push(left.id);
+      game.learned.push(left.id);
+    }
+
+    game.left=null;
+    game.rightPick=null;
+  }
+
+  renderMatch();
+}
+
+function renderSentence(){
+  const [mn,tokens]=game.questions[game.index];
+
+  screen.innerHTML=`
+  <div class="quiz">
+    ${gameTitle()}
+
+    <div class="card">
+      <p style="text-align:center">
+        Үгсийг зөв дарааллаар эвлүүл:
+      </p>
+
+      <h2 style="text-align:center">
+        ${esc(mn)}
+      </h2>
+
+      <div class="tokens answer-area">
+        ${game.selected.map(i=>`
+          <button
+            class="token"
+            onclick="removeToken(${i})"
+            ${game.answered?"disabled":""}
+          >
+            ${esc(tokens[i])}
+          </button>
+        `).join("")}
+      </div>
+
+      <div class="tokens">
+        ${game.order
+          .filter(i=>!game.selected.includes(i))
+          .map(i=>`
+            <button
+              class="token"
+              onclick="addToken(${i})"
+              ${game.answered?"disabled":""}
+            >
+              ${esc(tokens[i])}
+            </button>
+          `).join("")}
+      </div>
+
+      ${!game.answered?`
+        <button
+          class="primary"
+          onclick="checkSentence()"
+          ${game.selected.length!==tokens.length
+            ?"disabled":""}
+        >
+          Шалгах ✓
+        </button>
+      `:""}
+    </div>
+
+    ${game.answered?`
+      <div class="feedback ${
+        game.wasCorrect?"":"wrong"
+      }">
+        ${game.wasCorrect
+          ?"✅ Зөв!"
+          :"🌱 Зөв өгүүлбэр:"}
+
+        <p><b>${esc(tokens.join(" "))}</b></p>
+
+        <button
+          class="primary"
+          onclick="nextQuestion()"
+        >
+          Үргэлжлүүлэх →
+        </button>
+      </div>
+    `:""}
+  </div>`;
+}
+
+function addToken(i){
+  if(
+    !game||
+    game.mode!=="sentence"||
+    game.answered||
+    game.selected.includes(i)
+  )return;
+
+  game.selected.push(i);
+  renderSentence();
+}
+
+function removeToken(i){
+  if(
+    !game||
+    game.mode!=="sentence"||
+    game.answered
+  )return;
+
+  game.selected=game.selected.filter(x=>x!==i);
+  renderSentence();
+}
+
+function checkSentence(){
+  if(
+    !game||
+    game.mode!=="sentence"||
+    game.answered
+  )return;
+
+  const tokens=game.questions[game.index][1];
+
+  if(game.selected.length!==tokens.length)return;
+
+  game.wasCorrect=game.selected.every(
+    (x,i)=>x===i
+  );
+
+  game.answered=true;
+  game.attempts++;
+
+  if(game.wasCorrect){
+    game.correct++;
+  }
+
+  renderSentence();
+}
+
+function finishGame(){
+  if(!game||game.finished)return;
+
+  game.finished=true;
+  clearInterval(clock);
+  clock=null;
+
+  const total=
+    game.mode==="quiz"||game.mode==="sentence"
+      ?game.questions.length
+      :game.attempts;
+
+  const score=total
+    ?Math.round(game.correct*100/total)
+    :0;
+
+  const passed=total>0&&score>=70;
+
+  const gained=
+    game.correct*10+(passed?20:0);
+
+  state.xp+=gained;
+  state.correct+=game.correct;
+  state.rounds++;
+
+  state.learned=[
+    ...new Set([
+      ...state.learned,
+      ...game.learned
+    ])
+  ];
+
+  if(
+    passed&&
+    game.level!==null&&
+    !done(game.level)
+  ){
+    state.completed[state.lang].push(game.level);
+  }
+
+  const today=new Date().toLocaleDateString(
+    "en-CA",
+    {timeZone:"Asia/Ulaanbaatar"}
+  );
+
+  if(state.lastPlay!==today){
+    const difference=state.lastPlay
+      ?(Date.parse(today)-Date.parse(state.lastPlay))/86400000
+      :99;
+
+    state.streak=difference===1
+      ?state.streak+1
+      :1;
+
+    state.lastPlay=today;
+  }
+
+  save();
+
+  const mode=game.mode;
+  const level=game.level;
+
+  screen.innerHTML=`
+  <div class="result">
+    <h1>
+      ${passed
+        ?"🏆 Маш сайн!"
+        :"🌱 Дахин оролдоорой!"}
+    </h1>
+
+    <p>${score}% зөв · +${gained} XP</p>
+
+    <div class="grid">
+      ${stats(game.correct+"/"+total,"Зөв хариулт")}
+      ${stats(state.xp,"Нийт XP")}
+      ${stats(
+        Math.floor(state.xp/150)+1,
+        "XP Level"
+      )}
+    </div>
+
+    ${level!==null?`
+      <p>
+        ${passed
+          ?"✅ Дараагийн level нээгдлээ!"
+          :"70% хүрвэл дараагийн level нээгдэнэ."}
+      </p>
+    `:""}
+
+    <button
+      class="secondary"
+      onclick="startGame('${mode}',${level===null?"null":level})"
+    >
+      Дахин тоглох
+    </button>
+
+    <button
+      class="primary"
+      onclick="go('lessons')"
+    >
+      Level-үүд →
+    </button>
+  </div>`;
+}
+
+function showProgress(){
+  const level=Math.floor(state.xp/150)+1;
+  const cur=state.xp%150;
+
+  screen.innerHTML=`
+  <h1>⭐ Миний ахиц</h1>
+
+  <div class="grid">
+    ${stats(state.xp,"Нийт XP")}
+    ${stats(state.correct,"Нийт зөв")}
+    ${stats(state.rounds,"Тоглосон удаа")}
+  </div>
+
+  <div class="card">
+    <h2>XP Level ${level}</h2>
+    <p>
+      ${cur}/150 XP · Дараагийн түвшин хүртэл
+      ${150-cur} XP
+    </p>
+    ${bar(cur,150)}
+  </div>
+
+  <h2 class="section">Хичээлийн ахиц</h2>
+
+  <div class="grid words">
+    ${["en","ko"].map(lang=>`
+      <div class="card">
+        <h3>
+          ${lang==="en"
+            ?"🇬🇧 Англи"
+            :"🇰🇷 Солонгос"}
+        </h3>
+        <p>
+          ${state.completed[lang].length}/25 level
+        </p>
+        ${bar(state.completed[lang].length,25)}
+      </div>
+    `).join("")}
+  </div>
+
+  <h2 class="section">🏅 Амжилтын тэмдэг</h2>
+
+  <div class="grid">
+    ${[
+      ["Анхны тоглоом",state.rounds>=1],
+      ["20 үг",state.learned.length>=20],
+      ["100 XP",state.xp>=100],
+      ["Тууштай сурагч",state.streak>=3],
+      ["10 Level",Math.max(
+        state.completed.en.length,
+        state.completed.ko.length
+      )>=10],
+      ["25 Level",Math.max(
+        state.completed.en.length,
+        state.completed.ko.length
+      )>=25]
+    ].map(([name,earned])=>`
+      <div class="card">
+        ${earned?"🏅":"🔒"}
+        <h3>${name}</h3>
+      </div>
+    `).join("")}
+  </div>
+
+  <p class="muted">
+    Ахиц таны энэ браузер дээр хадгалагдана.
+  </p>`;
+}
+go("home");
+</script>
+</body>
+</html>
